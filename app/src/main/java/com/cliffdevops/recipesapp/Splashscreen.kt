@@ -11,8 +11,8 @@ class Splashscreen : AppCompatActivity() {
         setContentView(R.layout.activity_splashscreen)
 
         thread {
-            Thread.sleep(5000)
-            val intent = Intent(this, MainActivity::class.java)
+            Thread.sleep(3000)
+            val intent = Intent(this, RecipeActivity::class.java)
             startActivity(intent)
             finish()
         }

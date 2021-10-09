@@ -1,60 +1,44 @@
 package com.cliffdevops.recipesapp
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
-import com.cliffdevops.recipesapp.controller.RecipesAdapter
-import com.cliffdevops.recipesapp.databinding.ActivityMainBinding
 import com.cliffdevops.recipesapp.model.RecipeModel
 import com.cliffdevops.recipesapp.model.retrofit.RetroInstance
 import com.cliffdevops.recipesapp.model.retrofit.RetroServiceInterface
+import com.cliffdevops.recipesapp.ui.recipe.RecipeFragment
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class MainActivity : AppCompatActivity() {
-
-    private lateinit var recipesAdapter: RecipesAdapter
-    private lateinit var recipeList: List<RecipeModel>
-    private lateinit var binding: ActivityMainBinding
-
+class RecipeActivity : AppCompatActivity() {
+    private lateinit var binding: RecipeActivity
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.activity_main)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        setContentView(R.layout.recipe_activity)
 
-        val recyclerView = binding.recyclerView
-        recipesAdapter = RecipesAdapter(this)
-        recyclerView.adapter = recipesAdapter
 
-        getRecipes()
-
+        if (savedInstanceState == null) {
+            supportFragmentManager.beginTransaction()
+                .replace(R.id.container, RecipeFragment.newInstance())
+                .commitNow()
+        }
     }
 
-
-    private fun getRecipes() {
+    fun getRecipes() {
         val retroInstance = RetroInstance.getRetroInstance()
         val retroService = retroInstance.create(RetroServiceInterface::class.java)
         val call = retroService.getRecipesList()
 
         call.enqueue(object : Callback<List<RecipeModel>> {
 
-            @SuppressLint("NotifyDataSetChanged")
             override fun onResponse(
                 call: Call<List<RecipeModel>>,
                 response: Response<List<RecipeModel>>
             ) {
-                //showData(response.body()!!)
-                recipeList = response.body()!!
-
-                recipesAdapter.setRecipeList(recipeList)
-                recipesAdapter.notifyDataSetChanged()
-
-
-                Log.i("recipelog", "Success recipe Name: ${response.body()!![0].name}")
+                //showData()
+                Log.i("recipelog", "Success recipe Name: ${response.body()!![0].image}")
             }
 
             override fun onFailure(call: Call<List<RecipeModel>>, t: Throwable) {
@@ -64,5 +48,9 @@ class MainActivity : AppCompatActivity() {
         })
     }
 
+    fun showData(recipeList: List<RecipeModel>) {
+        //recyclerView.apply{
+
+    }
 
 }

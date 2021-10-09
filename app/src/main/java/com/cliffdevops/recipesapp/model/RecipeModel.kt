@@ -13,4 +13,5 @@ data class RecipeModel(
     val proteins: String,
     val thumb: String,
     val time: String
+
 )
